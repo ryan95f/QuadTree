@@ -121,20 +121,8 @@ void QuadTree::displayDepth() const
 	if(top_left_child != nullptr)
 	{
 		top_left_child->displayDepth();
-	}
-
-	if(top_right_child != nullptr)
-	{
 		top_right_child->displayDepth();
-	}
-
-	if(bottom_left_child != nullptr)
-	{
 		bottom_left_child->displayDepth();
-	}
-	
-	if(bottom_right_child != nullptr)
-	{
 		bottom_right_child->displayDepth();
 	}
 }
@@ -149,20 +137,8 @@ void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 	if(top_left_child != nullptr)
 	{
 		top_left_child->display(shape, target);
-	}
-
-	if(top_right_child != nullptr)
-	{
 		top_right_child->display(shape, target);
-	}
-
-	if(bottom_left_child != nullptr)
-	{
 		bottom_left_child->display(shape, target);
-	}
-
-	if(bottom_right_child != nullptr)
-	{
 		bottom_right_child->display(shape, target);
 	}
 }
