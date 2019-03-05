@@ -4,7 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 
-#define CHILD_LIMIT 4
+#define CHILD_THRRESHOLD 4
 
 class QuadTree
 {
@@ -16,6 +16,7 @@ public:
 	bool insert(sf::RectangleShape *circle);
 
 	void displayDepth() const;
+	int maxDepth() const;
 private:
 	void subdivide();
 
@@ -26,9 +27,6 @@ private:
 	QuadTree *bottom_left_child;
 	QuadTree *bottom_right_child;
 	std::vector<sf::RectangleShape *> entities;
-
-	
-	
 };
 
 #endif // __QUADTREE_HPP

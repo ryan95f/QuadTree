@@ -6,7 +6,7 @@
 #include "QuadTree.hpp"
 
 #define CIRCLE_RADIUS 5
-#define N_SQUARES 15
+#define N_SQUARES 5
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -16,7 +16,7 @@ int main()
 	float y = 0;
 
 	// Set the random seed
-	srand(time(NULL));
+	srand((unsigned int) time(NULL));
 	
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Quad Tree Test!");
