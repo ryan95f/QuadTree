@@ -9,23 +9,26 @@
 class QuadTree
 {
 public:
-	QuadTree(sf::FloatRect boundry);
+	QuadTree(sf::FloatRect boundry, int depth = 0);
 	~QuadTree();
 
 	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
+	bool insert(sf::RectangleShape *circle);
 
-	bool insert(sf::CircleShape *circle);
+	void displayDepth() const;
+private:
 	void subdivide();
 
-private:
-	std::vector<sf::CircleShape *> circles;
-
+	int depth;
 	sf::FloatRect boundry;
-
 	QuadTree *top_left_child;
 	QuadTree *top_right_child;
 	QuadTree *bottom_left_child;
 	QuadTree *bottom_right_child;
+	std::vector<sf::RectangleShape *> entities;
+
+	
+	
 };
 
 #endif // __QUADTREE_HPP

@@ -1,10 +1,10 @@
+#include <iostream>
 #include "QuadTree.hpp"
 
-QuadTree::QuadTree(sf::FloatRect boundry) : boundry(boundry), top_left_child(nullptr), 
-	top_right_child(nullptr), bottom_left_child(nullptr), bottom_right_child(nullptr)
-{
-	circles.resize(CHILD_LIMIT);
-}
+int q = 0;
+
+QuadTree::QuadTree(sf::FloatRect boundry, int depth) : boundry(boundry), depth(depth), top_left_child(nullptr), 
+	top_right_child(nullptr), bottom_left_child(nullptr), bottom_right_child(nullptr) {}
 
 QuadTree::~QuadTree()
 {
@@ -36,7 +36,7 @@ QuadTree::~QuadTree()
 void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 {
 	shape->setSize(sf::Vector2f(boundry.width, boundry.height));
-	shape->setPosition(boundry.top, boundry.left);
+	shape->setPosition(boundry.left, boundry.top);
 	target->draw(*shape);
 
 	if(top_left_child != nullptr)
@@ -60,18 +60,17 @@ void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 	}
 }
 
-bool QuadTree::insert(sf::CircleShape *shape)
+bool QuadTree::insert(sf::RectangleShape *shape)
 {
-	sf::Vector2f shape_pos = shape->getPosition();
-	if(!(boundry.left <= shape_pos.x && (boundry.left + boundry.width) >= shape_pos.x 
-		&& boundry.top <= shape_pos.y && (boundry.top + boundry.height) >= shape_pos.y))
+	sf::FloatRect shape_rect = shape->getGlobalBounds();
+	if(!boundry.intersects(shape_rect))
 	{
 		return false;
 	}
 
-	if(circles.size() <= CHILD_LIMIT && top_left_child == nullptr)
+	if(entities.size() < CHILD_LIMIT && top_left_child == nullptr)
 	{
-		circles.emplace_back(shape);
+		entities.emplace_back(shape);
 		return true;
 	}
 
@@ -93,16 +92,52 @@ bool QuadTree::insert(sf::CircleShape *shape)
 
 void QuadTree::subdivide()
 {
+	// calculate the new width and height
 	float width = boundry.width / 2.0f;
 	float height = boundry.height / 2.0f;
+	int next_depth = (depth + 1);
 
+	// calculate the boundries for the child nodes
 	sf::FloatRect top_left = sf::FloatRect(boundry.left, boundry.top, width, height);
 	sf::FloatRect top_right = sf::FloatRect((boundry.left + width), boundry.top, width, height);
 	sf::FloatRect bottom_left = sf::FloatRect(boundry.left, (boundry.top + height), width, height);
 	sf::FloatRect bottom_right = sf::FloatRect((boundry.left + width), (boundry.top + height), width, height);
 
-	top_left_child = new QuadTree(top_left);
-	top_right_child = new QuadTree(top_right);
-	bottom_left_child = new QuadTree(bottom_left);
-	bottom_right_child = new QuadTree(bottom_right);
+	// create the child nodes
+	top_left_child = new QuadTree(top_left, next_depth);
+	top_right_child = new QuadTree(top_right, next_depth);
+	bottom_left_child = new QuadTree(bottom_left, next_depth);
+	bottom_right_child = new QuadTree(bottom_right, next_depth);
+
+	while(entities.begin() != entities.end())
+	{
+		insert(*entities.begin());
+		entities.erase(entities.begin());
+	}
+	
+}
+
+void QuadTree::displayDepth() const
+{
+	std::cout << "Depth: " << depth << " " << entities.size() << std::endl;
+
+	if(top_left_child != nullptr)
+	{
+		top_left_child->displayDepth();
+	}
+
+	if(top_right_child != nullptr)
+	{
+		top_right_child->displayDepth();
+	}
+
+	if(bottom_left_child != nullptr)
+	{
+		bottom_left_child->displayDepth();
+	}
+	
+	if(bottom_right_child != nullptr)
+	{
+		bottom_right_child->displayDepth();
+	}
 }
