@@ -12,11 +12,12 @@ public:
 	QuadTree(sf::FloatRect boundry, int depth = 0);
 	~QuadTree();
 
-	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
+	int search(sf::FloatRect search_area);
 	bool insert(sf::RectangleShape *circle);
+	int maxDepth() const;
 
 	void displayDepth() const;
-	int maxDepth() const;
+	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
 private:
 	void subdivide();
 

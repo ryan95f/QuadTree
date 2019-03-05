@@ -34,31 +34,23 @@ QuadTree::~QuadTree()
 	}
 }
 
-void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
+int QuadTree::search(sf::FloatRect search_area)
 {
-	shape->setSize(sf::Vector2f(boundry.width, boundry.height));
-	shape->setPosition(boundry.left, boundry.top);
-	target->draw(*shape);
+	int k = 0;
+	if(!boundry.intersects(search_area))
+	{
+		return 0;
+	}
 
 	if(top_left_child != nullptr)
 	{
-		top_left_child->display(shape, target);
+		k+= top_left_child->search(search_area);
+		k+= top_right_child->search(search_area);
+		k+= bottom_left_child->search(search_area);
+		k+= bottom_right_child->search(search_area);
+		return k;
 	}
-
-	if(top_right_child != nullptr)
-	{
-		top_right_child->display(shape, target);
-	}
-
-	if(bottom_left_child != nullptr)
-	{
-		bottom_left_child->display(shape, target);
-	}
-
-	if(bottom_right_child != nullptr)
-	{
-		bottom_right_child->display(shape, target);
-	}
+	return entities.size();
 }
 
 bool QuadTree::insert(sf::RectangleShape *shape)
@@ -91,6 +83,37 @@ bool QuadTree::insert(sf::RectangleShape *shape)
 	return false;
 }
 
+
+int QuadTree::maxDepth() const
+{
+	int i = 0;
+	int largest = depth;
+	int depths[DEPTH_ARRAY_SIZE] = {0, 0, 0, 0};
+
+	// get the max depth from the top left child
+	if(top_left_child != nullptr)
+	{
+		depths[0] = top_left_child->maxDepth();
+		depths[1] = top_right_child->maxDepth();
+		depths[2] = bottom_left_child->maxDepth();
+		depths[3] = bottom_right_child->maxDepth();
+	}
+	
+	// loop through array and check that current
+	// depth is not smaller than those from the child branches.
+	for(i = 0; i < DEPTH_ARRAY_SIZE; ++i)
+	{
+		// if the largest is less than the current
+		// depth, make the depth the new largest.
+		if(largest < depths[i])
+		{
+			largest = depths[i];
+		}
+	}
+	return largest;
+}
+
+
 void QuadTree::displayDepth() const
 {
 	std::cout << "Depth: " << depth << " " << entities.size() << std::endl;
@@ -116,49 +139,34 @@ void QuadTree::displayDepth() const
 	}
 }
 
-int QuadTree::maxDepth() const
-{
-	int i = 0;
-	int largest = depth;
-	int depths[DEPTH_ARRAY_SIZE] = {0, 0, 0, 0};
 
-	// get the max depth from the top left child
+void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
+{
+	shape->setSize(sf::Vector2f(boundry.width, boundry.height));
+	shape->setPosition(boundry.left, boundry.top);
+	target->draw(*shape);
+
 	if(top_left_child != nullptr)
 	{
-		depths[0] = top_left_child->maxDepth();
+		top_left_child->display(shape, target);
 	}
 
-	// get the max depth from top right child
 	if(top_right_child != nullptr)
 	{
-		depths[1] = top_right_child->maxDepth();
+		top_right_child->display(shape, target);
 	}
 
-	// get the max depth from bottom left child
 	if(bottom_left_child != nullptr)
 	{
-		depths[2] = bottom_left_child->maxDepth();
-	}
-	
-	// get the max depth from bottom right child
-	if(bottom_right_child != nullptr)
-	{
-		depths[3] = bottom_right_child->maxDepth();
+		bottom_left_child->display(shape, target);
 	}
 
-	// loop through array and check that current
-	// depth is not smaller than those from the child branches.
-	for(i = 0; i < DEPTH_ARRAY_SIZE; ++i)
+	if(bottom_right_child != nullptr)
 	{
-		// if the largest is less than the current
-		// depth, make the depth the new largest.
-		if(largest < depths[i])
-		{
-			largest = depths[i];
-		}
+		bottom_right_child->display(shape, target);
 	}
-	return largest;
 }
+
 
 void QuadTree::subdivide()
 {
@@ -189,5 +197,4 @@ void QuadTree::subdivide()
 		// discard reference from this layer in the tree
 		entities.erase(entities.begin());
 	}
-
 }
