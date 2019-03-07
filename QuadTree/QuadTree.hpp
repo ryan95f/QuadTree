@@ -13,6 +13,9 @@ public:
 	~QuadTree();
 
 	int search(sf::FloatRect search_area);
+	
+	bool collisions(sf::FloatRect search_area);
+
 	bool insert(sf::RectangleShape *circle);
 	int maxDepth() const;
 

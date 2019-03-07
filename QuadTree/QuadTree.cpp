@@ -53,6 +53,40 @@ int QuadTree::search(sf::FloatRect search_area)
 	return entities.size();
 }
 
+bool QuadTree::collisions(sf::FloatRect search_area)
+{
+	bool tl = false;
+	bool tr = false;
+	bool bl = false; 
+	bool br = false;
+	
+	sf::FloatRect entity_rect = sf::FloatRect(0, 0, 0, 0);
+
+	if(!boundry.intersects(search_area))
+	{
+		return false;
+	}
+
+	if(top_left_child != nullptr)
+	{
+		tl = top_left_child->collisions(search_area);
+		tr = top_right_child->collisions(search_area);
+		bl = bottom_left_child->collisions(search_area);
+		br = bottom_right_child->collisions(search_area);
+		return (tl || tr) || (bl || br);
+	}
+
+	for(sf::RectangleShape *s : entities)
+	{
+		entity_rect = s->getGlobalBounds();
+		if(search_area.intersects(entity_rect))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool QuadTree::insert(sf::RectangleShape *shape)
 {
 	sf::FloatRect shape_rect = shape->getGlobalBounds();

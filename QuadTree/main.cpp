@@ -6,7 +6,7 @@
 #include "QuadTree.hpp"
 
 #define POINT_WIDTH 5
-#define N_SQUARES 1000
+#define N_SQUARES 50
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -36,8 +36,8 @@ int main()
 		tree.insert(&squares[i]);
 	}
 	
-	sf::RectangleShape m(sf::Vector2f(30, 30));
-	m.setPosition(250, 300);
+	 sf::RectangleShape m(sf::Vector2f(30, 30));
+	 m.setPosition(250, 300);
 
 	// set up the display square
 	sf::RectangleShape s;
@@ -61,7 +61,8 @@ int main()
 				float x = (float) evnt.mouseButton.x;
 				float y = (float) evnt.mouseButton.y;
 				m.setPosition(x, y);
-				std::cout << tree.search(m.getGlobalBounds()) << std::endl;
+				bool a = tree.collisions(m.getGlobalBounds());
+				std::cout << a << std::endl;
 			}
 		}
 
@@ -76,7 +77,7 @@ int main()
 			window.draw(squares[i]);
 		}
 
-		window.draw(m);
+		 window.draw(m);
 
 		// Display drawn objects
 		window.display();
