@@ -8,7 +8,8 @@ QuadTree::QuadTree(sf::FloatRect boundry, int depth) : boundry(boundry), depth(d
 
 QuadTree::~QuadTree()
 {
-	// Delete each child branch if not a null pointer
+	// Delete each of the child nodes in the tree if they are not null.
+	// Once deleted, set the pointer to be a null pointer.
 	if(top_left_child != nullptr)
 	{
 		delete top_left_child;
@@ -36,7 +37,7 @@ QuadTree::~QuadTree()
 
 int QuadTree::search(sf::FloatRect search_area)
 {
-	int k = 0;
+	int count = 0;
 	if(!boundry.intersects(search_area))
 	{
 		return 0;
@@ -44,68 +45,90 @@ int QuadTree::search(sf::FloatRect search_area)
 
 	if(top_left_child != nullptr)
 	{
-		k+= top_left_child->search(search_area);
-		k+= top_right_child->search(search_area);
-		k+= bottom_left_child->search(search_area);
-		k+= bottom_right_child->search(search_area);
-		return k;
+		count += top_left_child->search(search_area);
+		count += top_right_child->search(search_area);
+		count += bottom_left_child->search(search_area);
+		count += bottom_right_child->search(search_area);
+		return count;
 	}
 	return entities.size();
 }
 
 bool QuadTree::collisions(sf::FloatRect search_area)
 {
-	bool tl = false;
-	bool tr = false;
-	bool bl = false; 
-	bool br = false;
-	
+	// bools to check if there have been collisions from the child nodes.
+	bool collision_top_left = false;
+	bool collision_top_right = false;
+	bool collision_btm_left = false; 
+	bool collision_btm_right = false;
+
 	sf::FloatRect entity_rect = sf::FloatRect(0, 0, 0, 0);
 
+	// check that the search area is in the current quad
 	if(!boundry.intersects(search_area))
 	{
+		// if not in the current quad, return false.
 		return false;
 	}
 
+	// check that the tree has child nodes
 	if(top_left_child != nullptr)
 	{
-		tl = top_left_child->collisions(search_area);
-		tr = top_right_child->collisions(search_area);
-		bl = bottom_left_child->collisions(search_area);
-		br = bottom_right_child->collisions(search_area);
-		return (tl || tr) || (bl || br);
+		// if node has children, check there collisions
+		collision_top_left = top_left_child->collisions(search_area);
+		collision_top_right = top_right_child->collisions(search_area);
+		collision_btm_left = bottom_left_child->collisions(search_area);
+		collision_btm_right = bottom_right_child->collisions(search_area);
+
+		// OR them all together, as if one or more are true, then there has been  a collision.
+		return (collision_top_left || collision_top_right) || (collision_btm_left || collision_btm_right);
 	}
 
+	// if we are in the leaf nodes, loop through the nodes that are referenced in this quad.
 	for(sf::RectangleShape *s : entities)
 	{
+		// return true only if there is a collision with one of this points
 		entity_rect = s->getGlobalBounds();
 		if(search_area.intersects(entity_rect))
 		{
 			return true;
 		}
 	}
+
+	// Otherwise return false if there are no collisions.
 	return false;
 }
 
 bool QuadTree::insert(sf::RectangleShape *shape)
 {
+	// get the global bounds to check that the shape is in
+	// this region of the world space.
 	sf::FloatRect shape_rect = shape->getGlobalBounds();
+	
+	// Check that the current shape is in this part of the tree.
 	if(!boundry.intersects(shape_rect))
 	{
+		// If the shape does not intersect, then return false as
+		// it is not in this part of the tree.
 		return false;
 	}
 
+	// if the quad tree has not exceeded its child threshold
+	// and is a leaf node, then add it to the list of entities.
 	if(entities.size() < CHILD_THRRESHOLD && top_left_child == nullptr)
 	{
 		entities.emplace_back(shape);
 		return true;
 	}
 
+	// If threshold has been exceeded as a leaft node,
+	// then we subdivide the current quad.
 	if(top_left_child == nullptr)
 	{
 		subdivide();
 	}
 	
+	// attempt to insert the current shape into one of the child quads.
 	if(top_left_child->insert(shape)) { return true; }
 	
 	if(top_right_child->insert(shape)) { return true; }
@@ -114,6 +137,8 @@ bool QuadTree::insert(sf::RectangleShape *shape)
 	
 	if(bottom_right_child->insert(shape)) { return true; }
 
+	// Should never be able to reach this statement,
+	// but return false if by some chance it occurs.
 	return false;
 }
 
@@ -121,10 +146,16 @@ bool QuadTree::insert(sf::RectangleShape *shape)
 int QuadTree::maxDepth() const
 {
 	int i = 0;
+
+	// set largest to be the current depth as if the quad has children,
+	// then the depth can only get larger.
 	int largest = depth;
+
+	// depths array to store the depth for each child
+	// DEPTH_ARRAY_SIZE is set to 4, as tree has 4 child nodes.
 	int depths[DEPTH_ARRAY_SIZE] = {0, 0, 0, 0};
 
-	// get the max depth from the top left child
+	// if this quad is not a leaf node, get the depth from each child node.
 	if(top_left_child != nullptr)
 	{
 		depths[0] = top_left_child->maxDepth();
@@ -137,8 +168,7 @@ int QuadTree::maxDepth() const
 	// depth is not smaller than those from the child branches.
 	for(i = 0; i < DEPTH_ARRAY_SIZE; ++i)
 	{
-		// if the largest is less than the current
-		// depth, make the depth the new largest.
+		// if the largest is less than the current depth, make the depth the new largest.
 		if(largest < depths[i])
 		{
 			largest = depths[i];
@@ -180,6 +210,7 @@ void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 
 void QuadTree::subdivide()
 {
+	// increase the current depth by 1 for the children nodes
 	int next_depth = (depth + 1);
 
 	// calculate the new width and height
