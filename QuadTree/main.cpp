@@ -6,7 +6,7 @@
 #include "QuadTree.hpp"
 
 #define POINT_WIDTH 5
-#define N_SQUARES 50
+#define N_SQUARES 1500
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -19,7 +19,7 @@ int main()
 	srand((unsigned int) time(NULL));
 	
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Quad Tree Test!");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Quad Tree");
 	
 	// Create the quad tree
 	QuadTree tree(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -77,7 +77,7 @@ int main()
 			window.draw(squares[i]);
 		}
 
-		 window.draw(m);
+		 //window.draw(m);
 
 		// Display drawn objects
 		window.display();
