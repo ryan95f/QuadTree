@@ -6,7 +6,7 @@
 #include "QuadTree.hpp"
 
 #define POINT_WIDTH 5
-#define N_SQUARES 1500
+#define N_SQUARES 300
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -77,7 +77,7 @@ int main()
 			window.draw(squares[i]);
 		}
 
-		 //window.draw(m);
+		 window.draw(m);
 
 		// Display drawn objects
 		window.display();
