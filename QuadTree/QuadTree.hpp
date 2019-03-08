@@ -4,7 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 
-#define CHILD_THRRESHOLD 4
+#define CHILD_THRRESHOLD 2
 
 class QuadTree
 {
@@ -13,8 +13,9 @@ public:
 	~QuadTree();
 
 	int search(sf::FloatRect search_area);
-	
 	bool collisions(sf::FloatRect search_area);
+
+	void clear();
 
 	bool insert(sf::RectangleShape *circle);
 	int maxDepth() const;

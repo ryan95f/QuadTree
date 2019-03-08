@@ -8,31 +8,7 @@ QuadTree::QuadTree(sf::FloatRect boundry, int depth) : boundry(boundry), depth(d
 
 QuadTree::~QuadTree()
 {
-	// Delete each of the child nodes in the tree if they are not null.
-	// Once deleted, set the pointer to be a null pointer.
-	if(top_left_child != nullptr)
-	{
-		delete top_left_child;
-		top_left_child = nullptr;
-	}
-
-	if(top_right_child != nullptr)
-	{
-		delete top_right_child;
-		top_right_child = nullptr;
-	}
-
-	if(bottom_left_child != nullptr)
-	{
-		delete bottom_left_child;
-		bottom_left_child = nullptr;
-	}
-
-	if(bottom_right_child != nullptr)
-	{
-		delete bottom_right_child;
-		bottom_right_child = nullptr;
-	}
+	clear();
 }
 
 int QuadTree::search(sf::FloatRect search_area)
@@ -97,6 +73,35 @@ bool QuadTree::collisions(sf::FloatRect search_area)
 
 	// Otherwise return false if there are no collisions.
 	return false;
+}
+
+void QuadTree::clear()
+{
+	// Delete each of the child nodes in the tree if they are not null.
+	// Once deleted, set the pointer to be a null pointer.
+	if(top_left_child != nullptr)
+	{
+		delete top_left_child;
+		top_left_child = nullptr;
+	}
+
+	if(top_right_child != nullptr)
+	{
+		delete top_right_child;
+		top_right_child = nullptr;
+	}
+
+	if(bottom_left_child != nullptr)
+	{
+		delete bottom_left_child;
+		bottom_left_child = nullptr;
+	}
+
+	if(bottom_right_child != nullptr)
+	{
+		delete bottom_right_child;
+		bottom_right_child = nullptr;
+	}
 }
 
 bool QuadTree::insert(sf::RectangleShape *shape)

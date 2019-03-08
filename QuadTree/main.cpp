@@ -6,7 +6,7 @@
 #include "QuadTree.hpp"
 
 #define POINT_WIDTH 5
-#define N_SQUARES 300
+#define N_SQUARES 14
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -16,7 +16,7 @@ int main()
 	float y = 0;
 
 	// Set the random seed
-	srand((unsigned int) time(NULL));
+	// srand((unsigned int) time(NULL));
 	
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Quad Tree");
@@ -36,8 +36,8 @@ int main()
 		tree.insert(&squares[i]);
 	}
 	
-	 sf::RectangleShape m(sf::Vector2f(30, 30));
-	 m.setPosition(250, 300);
+	 //sf::RectangleShape m(sf::Vector2f(30, 30));
+	 //m.setPosition(250, 300);
 
 	// set up the display square
 	sf::RectangleShape s;
@@ -46,6 +46,7 @@ int main()
 	s.setOutlineThickness(1);
 
 	std::cout << "Max Depth: " << tree.maxDepth() << std::endl;
+
 
 	while(window.isOpen())
 	{
@@ -56,14 +57,14 @@ int main()
 			{
 				window.close();
 			}
-			else if(evnt.type == sf::Event::MouseButtonReleased)
+			/*else if(evnt.type == sf::Event::MouseButtonReleased)
 			{
 				float x = (float) evnt.mouseButton.x;
 				float y = (float) evnt.mouseButton.y;
 				m.setPosition(x, y);
 				bool a = tree.collisions(m.getGlobalBounds());
 				std::cout << a << std::endl;
-			}
+			}*/
 		}
 
 		window.clear(sf::Color::Black);
@@ -77,7 +78,7 @@ int main()
 			window.draw(squares[i]);
 		}
 
-		 window.draw(m);
+		 //window.draw(m);
 
 		// Display drawn objects
 		window.display();
