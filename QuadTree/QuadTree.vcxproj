@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Point.hpp" />
     <ClInclude Include="QuadTree.hpp" />
     <ClInclude Include="TestState.hpp" />
   </ItemGroup>

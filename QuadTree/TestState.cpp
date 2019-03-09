@@ -17,11 +17,13 @@ TestState::TestState(int width, int height) : width(width), height(height)
 	{
 		x = (float) (rand() % 600);
 		y = (float) (rand() % 600);
-		squares[i].setSize(sf::Vector2f(POINT_WIDTH, POINT_WIDTH));
-		squares[i].setPosition(x, y);
-		squares[i].setOrigin(POINT_WIDTH / 2.0f, POINT_WIDTH / 2.0f);
-		tree->insert(&squares[i]);
+		points[i].pos = sf::Vector2f(x, y);
+		tree->insert(&points[i]);
 	}
+
+	point_square.setFillColor(sf::Color::White);
+	point_square.setSize(sf::Vector2f(POINT_WIDTH, POINT_HEIGHT));
+	point_square.setOrigin(POINT_WIDTH / 2.0f, POINT_HEIGHT / 2.0f);
 
 	treeSquare.setFillColor(sf::Color::Transparent);
 	treeSquare.setOutlineColor(sf::Color::Blue);
@@ -43,10 +45,18 @@ void TestState::update(float dt)
 	sf::Vector2f pos = sf::Vector2f(0, 0);
 	for(int i = 0; i < N_SQUARES; ++i)
 	{
-		pos = squares[i].getPosition();
-		pos.x += 20 * dt;
-		squares[i].setPosition(pos);
-		tree->insert(&squares[i]);
+		pos = points[i].pos;
+		if (pos.x >= 0 && pos.x <= width)
+		{
+			pos.x += 20 * dt;
+		}
+		else
+		{
+			pos.x -= 20 * dt;
+		}
+		
+		points[i].pos = pos;
+		tree->insert(&points[i]);
 	}
 }
 
@@ -56,6 +66,7 @@ void TestState::render(sf::RenderWindow *window)
 
 	for(int i = 0; i < N_SQUARES; ++i)
 	{
-		window->draw(squares[i]);
+		point_square.setPosition(points[i].pos);
+		window->draw(point_square);
 	}
 }

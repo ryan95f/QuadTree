@@ -1,10 +1,10 @@
 #ifndef __TEST_STATE_HPP
 #define __TEST_STATE_HPP
 
-#define POINT_WIDTH 5
 #define N_SQUARES 30
 
 #include "QuadTree.hpp"
+#include "Point.hpp"
 
 class TestState
 {
@@ -20,7 +20,8 @@ private:
 	const int height;
 
 	QuadTree *tree;
-	sf::RectangleShape squares[N_SQUARES];
+	Point points[N_SQUARES];
+	sf::RectangleShape point_square;
 	sf::RectangleShape treeSquare;
 };
 

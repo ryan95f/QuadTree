@@ -61,7 +61,7 @@ bool QuadTree::collisions(sf::FloatRect search_area)
 	}
 
 	// if we are in the leaf nodes, loop through the nodes that are referenced in this quad.
-	for(sf::RectangleShape *s : entities)
+	for(Point *s : entities)
 	{
 		// return true only if there is a collision with one of this points
 		entity_rect = s->getGlobalBounds();
@@ -105,7 +105,7 @@ void QuadTree::clear()
 	entities.clear();
 }
 
-bool QuadTree::insert(sf::RectangleShape *shape)
+bool QuadTree::insert(Point *shape)
 {
 	// get the global bounds to check that the shape is in
 	// this region of the world space.

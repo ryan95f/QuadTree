@@ -4,6 +4,8 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 
+#include "Point.hpp"
+
 #define CHILD_THRRESHOLD 2
 
 class QuadTree
@@ -17,7 +19,7 @@ public:
 
 	void clear();
 
-	bool insert(sf::RectangleShape *circle);
+	bool insert(Point *point);
 	int maxDepth() const;
 
 	void displayDepth() const;
@@ -31,7 +33,7 @@ private:
 	QuadTree *top_right_child;
 	QuadTree *bottom_left_child;
 	QuadTree *bottom_right_child;
-	std::vector<sf::RectangleShape *> entities;
+	std::vector<Point *> entities;
 };
 
 #endif // __QUADTREE_HPP
