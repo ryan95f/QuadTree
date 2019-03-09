@@ -3,7 +3,7 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
-Game::Game()
+Game::Game() : state(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
 	window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Quad Tree");
 }
@@ -29,7 +29,7 @@ void Game::update()
 
 	if(elapsed >= timestep)
 	{
-		state.update(elapsed);
+		state.update(timestep);
 		elapsed_time -= sf::seconds(timestep);
 	}
 }

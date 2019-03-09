@@ -3,7 +3,7 @@
 
 #include "TestState.hpp"
 
-TestState::TestState()
+TestState::TestState(int width, int height) : width(width), height(height)
 {
 	float x = 0;
 	float y = 0;
@@ -11,7 +11,7 @@ TestState::TestState()
 	// set the random seed
 	// srand((unsigned int) time(NULL));
 
-	tree = new QuadTree(sf::FloatRect(0, 0, 600, 600));
+	tree = new QuadTree(sf::FloatRect(0, 0, (float) width, (float) height));
 
 	for(int i = 0; i < N_SQUARES; ++i)
 	{
@@ -39,7 +39,15 @@ TestState::~TestState()
 
 void TestState::update(float dt)
 {
-
+	tree->clear();
+	sf::Vector2f pos = sf::Vector2f(0, 0);
+	for(int i = 0; i < N_SQUARES; ++i)
+	{
+		pos = squares[i].getPosition();
+		pos.x += 20 * dt;
+		squares[i].setPosition(pos);
+		tree->insert(&squares[i]);
+	}
 }
 
 void TestState::render(sf::RenderWindow *window)
