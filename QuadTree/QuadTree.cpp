@@ -102,6 +102,7 @@ void QuadTree::clear()
 		delete bottom_right_child;
 		bottom_right_child = nullptr;
 	}
+	entities.clear();
 }
 
 bool QuadTree::insert(sf::RectangleShape *shape)
