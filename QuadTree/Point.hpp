@@ -5,6 +5,8 @@
 
 #define POINT_WIDTH 5
 #define POINT_HEIGHT 5
+#define POINT_X_VELOCITY 0.4f
+#define POINT_Y_VELOCITY 0.4f
 
 enum class Direction { LEFT, RIGHT };
 
@@ -18,7 +20,7 @@ struct Point
 	{
 		pos = sf::Vector2f(0, 0);
 		direction = Direction::LEFT;
-		increment = sf::Vector2f(0.4f, 0.4f);
+		increment = sf::Vector2f(POINT_X_VELOCITY, POINT_Y_VELOCITY);
 	}
 
 	sf::FloatRect getGlobalBounds() const

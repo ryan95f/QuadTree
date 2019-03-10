@@ -22,7 +22,7 @@ private:
 	QuadTree *tree;
 	Point points[N_SQUARES];
 	sf::RectangleShape point_square;
-	sf::RectangleShape treeSquare;
+	sf::RectangleShape tree_square;
 };
 
 

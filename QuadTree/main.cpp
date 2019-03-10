@@ -1,10 +1,4 @@
-#include <SFML\Graphics.hpp>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-
 #include "Game.hpp"
-#include "QuadTree.hpp"
 
 int main()
 {
