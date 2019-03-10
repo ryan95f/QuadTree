@@ -14,19 +14,26 @@ QuadTree::~QuadTree()
 int QuadTree::search(sf::FloatRect search_area)
 {
 	int count = 0;
+
+	// if the search area is not in curent quad, return 0 for no entities.
 	if(!boundry.intersects(search_area))
 	{
 		return 0;
 	}
 
+	// if not a leaft node, search all child nodes
 	if(top_left_child != nullptr)
 	{
+		// add the count from each quad in case search area is over multiple quads.
 		count += top_left_child->search(search_area);
 		count += top_right_child->search(search_area);
 		count += bottom_left_child->search(search_area);
 		count += bottom_right_child->search(search_area);
 		return count;
 	}
+	
+	// only executes if the current quad is a leaf node,
+	// which will return number of entities in collision region.
 	return entities.size();
 }
 
@@ -184,26 +191,16 @@ int QuadTree::maxDepth() const
 }
 
 
-void QuadTree::displayDepth() const
-{
-	std::cout << "Depth: " << depth << " " << entities.size() << std::endl;
-
-	if(top_left_child != nullptr)
-	{
-		top_left_child->displayDepth();
-		top_right_child->displayDepth();
-		bottom_left_child->displayDepth();
-		bottom_right_child->displayDepth();
-	}
-}
-
-
 void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 {
+	// set the quad size and position.
 	shape->setSize(sf::Vector2f(boundry.width, boundry.height));
 	shape->setPosition(boundry.left, boundry.top);
+	
+	// draw the square
 	target->draw(*shape);
 
+	// if not a leaf node, recursively go down each child to draw the entire quad tree.
 	if(top_left_child != nullptr)
 	{
 		top_left_child->display(shape, target);

@@ -8,18 +8,14 @@
 #define POINT_X_VELOCITY 0.4f
 #define POINT_Y_VELOCITY 0.4f
 
-enum class Direction { LEFT, RIGHT };
-
 struct Point
 {
-	Direction direction;
 	sf::Vector2f pos;
 	sf::Vector2f increment;
 
 	Point()
 	{
 		pos = sf::Vector2f(0, 0);
-		direction = Direction::LEFT;
 		increment = sf::Vector2f(POINT_X_VELOCITY, POINT_Y_VELOCITY);
 	}
 

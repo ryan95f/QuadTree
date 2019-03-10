@@ -22,7 +22,6 @@ public:
 	bool insert(Point *point);
 	int maxDepth() const;
 
-	void displayDepth() const;
 	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
 private:
 	void subdivide();
