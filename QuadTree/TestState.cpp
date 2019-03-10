@@ -42,21 +42,26 @@ TestState::~TestState()
 void TestState::update(float dt)
 {
 	tree->clear();
+	Point *point = nullptr;
 	sf::Vector2f pos = sf::Vector2f(0, 0);
+	sf::Vector2f increment = sf::Vector2f(0, 0);
 	for(int i = 0; i < N_SQUARES; ++i)
 	{
-		pos = points[i].pos;
-		if (pos.x >= 0 && pos.x <= width)
+		point = &points[i];
+		increment = point->increment;
+		pos = point->pos;
+
+		if((pos.x > width && increment.x > 0) || (pos.x < 0 && increment.x < 0))
 		{
-			pos.x += 20 * dt;
+			point->increment.x = -increment.x;
 		}
-		else
+
+		if((pos.y > height && increment.y > 0) || (pos.y < 0 && increment.y < 0))
 		{
-			pos.x -= 20 * dt;
+			point->increment.y = -increment.y;
 		}
-		
-		points[i].pos = pos;
-		tree->insert(&points[i]);
+		point->pos = (pos + increment);
+		tree->insert(point);
 	}
 }
 

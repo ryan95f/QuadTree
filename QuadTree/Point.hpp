@@ -6,23 +6,20 @@
 #define POINT_WIDTH 5
 #define POINT_HEIGHT 5
 
-enum class Horizontal
-{
-	LEFT = 0,
-	RIGHT,
-};
-
-enum class Vertical
-{
-	UP = 0,
-	DOWN
-};
+enum class Direction { LEFT, RIGHT };
 
 struct Point
 {
+	Direction direction;
 	sf::Vector2f pos;
-	Horizontal horizontal;
-	Vertical vertical;
+	sf::Vector2f increment;
+
+	Point()
+	{
+		pos = sf::Vector2f(0, 0);
+		direction = Direction::LEFT;
+		increment = sf::Vector2f(0.4f, 0.4f);
+	}
 
 	sf::FloatRect getGlobalBounds() const
 	{

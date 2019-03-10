@@ -1,7 +1,7 @@
 #ifndef __TEST_STATE_HPP
 #define __TEST_STATE_HPP
 
-#define N_SQUARES 30
+#define N_SQUARES 300
 
 #include "QuadTree.hpp"
 #include "Point.hpp"

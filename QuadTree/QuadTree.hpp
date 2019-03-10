@@ -6,7 +6,7 @@
 
 #include "Point.hpp"
 
-#define CHILD_THRRESHOLD 2
+#define CHILD_THRRESHOLD 4
 
 class QuadTree
 {
