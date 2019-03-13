@@ -8,6 +8,8 @@
 
 #define CHILD_THRRESHOLD 4
 
+typedef std::vector<Point *> PointVector;
+
 class QuadTree
 {
 public:
@@ -22,6 +24,8 @@ public:
 	bool insert(Point *point);
 	int maxDepth() const;
 
+	PointVector * retrieve(PointVector * returnList, sf::FloatRect search);
+
 	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
 private:
 	void subdivide();
@@ -32,7 +36,7 @@ private:
 	QuadTree *top_right_child;
 	QuadTree *bottom_left_child;
 	QuadTree *bottom_right_child;
-	std::vector<Point *> entities;
+	PointVector entities;
 };
 
 #endif // __QUADTREE_HPP

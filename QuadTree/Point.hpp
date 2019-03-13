@@ -7,6 +7,7 @@
 #define POINT_HEIGHT 5
 #define POINT_X_VELOCITY 0.4f
 #define POINT_Y_VELOCITY 0.4f
+#define DEFAULT_COLOUR sf::Color::White;
 
 struct Point
 {
@@ -22,6 +23,12 @@ struct Point
 	sf::FloatRect getGlobalBounds() const
 	{
 		return sf::FloatRect(pos.x, pos.y, POINT_WIDTH, POINT_HEIGHT);
+	}
+	
+	void resolveCollision()
+	{
+		increment.x = -increment.x;
+		increment.y = -increment.y;
 	}
 };
 

@@ -190,6 +190,38 @@ int QuadTree::maxDepth() const
 	return largest;
 }
 
+PointVector * QuadTree::retrieve(PointVector * returnList, sf::FloatRect search)
+{
+	if(!boundry.intersects(search))
+	{
+		return returnList;
+	}
+
+	if(top_left_child != nullptr)
+	{
+		top_left_child->retrieve(returnList, search);
+		top_right_child->retrieve(returnList, search);
+		bottom_left_child->retrieve(returnList, search);
+		bottom_right_child->retrieve(returnList, search);
+
+		return returnList;
+	}
+
+	if(entities.size() == 0)
+	{
+		return returnList;
+	}
+
+	for(Point *p : entities)
+	{
+		if(p->getGlobalBounds() == search)
+		{
+			continue;
+		}
+		returnList->push_back(p);
+	}
+	return returnList;
+}
 
 void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 {
@@ -209,7 +241,6 @@ void QuadTree::display(sf::RectangleShape *shape, sf::RenderWindow *target)
 		bottom_right_child->display(shape, target);
 	}
 }
-
 
 void QuadTree::subdivide()
 {
