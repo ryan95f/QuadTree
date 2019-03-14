@@ -192,11 +192,14 @@ int QuadTree::maxDepth() const
 
 PointVector * QuadTree::retrieve(PointVector * returnList, sf::FloatRect search)
 {
+	// check that the search area intersects with the current quad.
+	// if it does not intersect the current quad region then stop the search and return the list.
 	if(!boundry.intersects(search))
 	{
 		return returnList;
 	}
 
+	// if the current quad is a non-leaf node then search the child quads.
 	if(top_left_child != nullptr)
 	{
 		top_left_child->retrieve(returnList, search);
@@ -207,17 +210,24 @@ PointVector * QuadTree::retrieve(PointVector * returnList, sf::FloatRect search)
 		return returnList;
 	}
 
+	// if current leaf node has no entities registered to it, then return the list.
 	if(entities.size() == 0)
 	{
 		return returnList;
 	}
 
+
+	// Leaf node with children and this point. Loop through them to add to the list.
 	for(Point *p : entities)
 	{
+		// Don't include the point if the search bounds match a point in
+		// the list as this is likely the point we are checking the collisons for.
 		if(p->getGlobalBounds() == search)
 		{
 			continue;
 		}
+
+		// add the point to the return list
 		returnList->push_back(p);
 	}
 	return returnList;

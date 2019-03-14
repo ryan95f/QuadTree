@@ -97,6 +97,7 @@ void TestState::update(float dt)
 		// get the bounds of the current point and extract all points that are in its quad.
 		sf::FloatRect bounds = points[i].getGlobalBounds();
 		tree->retrieve(collisionVector, bounds);
+		points[i].update(dt);
 
 		// loop through all points in the quad and check that the current
 		// point could have collided with another point. 
@@ -126,6 +127,7 @@ void TestState::render(sf::RenderWindow *window)
 	for(int i = 0; i < N_SQUARES; ++i)
 	{
 		point_square.setPosition(points[i].pos);
+		point_square.setFillColor(points[i].colour);
 		window->draw(point_square);
 	}
 }
