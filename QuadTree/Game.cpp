@@ -17,6 +17,7 @@ void Game::handleInputs()
 	{
 		if(evnt.type == sf::Event::Closed)
 		{
+			// close the window
 			window.close();
 		}
 	}
@@ -27,6 +28,8 @@ void Game::update()
 	float timestep = 1 / 120.0f;
 	float elapsed = elapsed_time.asSeconds();
 
+	// if the current game time has reach a "tick"
+	// execute the state's update method.
 	if(elapsed >= timestep)
 	{
 		state.update(timestep);
@@ -36,13 +39,19 @@ void Game::update()
 
 void Game::render()
 {
+	// clear the screen of all objects
 	window.clear(sf::Color::Black);
+
+	// draw to all objects to the buffer within the state
 	state.render(&window);
+
+	// display the drawn objects in the buffer
 	window.display();
 }
 
 void Game::restartClock()
 {
+	// reset the game block
 	elapsed_time += clock.restart();
 }
 
