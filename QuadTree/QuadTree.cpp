@@ -11,7 +11,7 @@ QuadTree::~QuadTree()
 	clear();
 }
 
-int QuadTree::search(sf::FloatRect search_area)
+int QuadTree::getPointsInArea(sf::FloatRect search_area)
 {
 	int count = 0;
 
@@ -25,10 +25,10 @@ int QuadTree::search(sf::FloatRect search_area)
 	if(top_left_child != nullptr)
 	{
 		// add the count from each quad in case search area is over multiple quads.
-		count += top_left_child->search(search_area);
-		count += top_right_child->search(search_area);
-		count += bottom_left_child->search(search_area);
-		count += bottom_right_child->search(search_area);
+		count += top_left_child->getPointsInArea(search_area);
+		count += top_right_child->getPointsInArea(search_area);
+		count += bottom_left_child->getPointsInArea(search_area);
+		count += bottom_right_child->getPointsInArea(search_area);
 		return count;
 	}
 	
@@ -37,13 +37,13 @@ int QuadTree::search(sf::FloatRect search_area)
 	return entities.size();
 }
 
-bool QuadTree::collisions(sf::FloatRect search_area)
+bool QuadTree::isIntersecting(sf::FloatRect search_area)
 {
 	// bools to check if there have been collisions from the child nodes.
-	bool collision_top_left = false;
-	bool collision_top_right = false;
-	bool collision_btm_left = false; 
-	bool collision_btm_right = false;
+	bool is_intersecting_top_left = false;
+	bool is_intersecting_top_right = false;
+	bool is_intersecting_btm_left = false; 
+	bool is_intersecting_btm_right = false;
 
 	sf::FloatRect entity_rect = sf::FloatRect(0, 0, 0, 0);
 
@@ -58,19 +58,19 @@ bool QuadTree::collisions(sf::FloatRect search_area)
 	if(top_left_child != nullptr)
 	{
 		// if node has children, check there collisions
-		collision_top_left = top_left_child->collisions(search_area);
-		collision_top_right = top_right_child->collisions(search_area);
-		collision_btm_left = bottom_left_child->collisions(search_area);
-		collision_btm_right = bottom_right_child->collisions(search_area);
+		is_intersecting_top_left = top_left_child->isIntersecting(search_area);
+		is_intersecting_top_right = top_right_child->isIntersecting(search_area);
+		is_intersecting_btm_left = bottom_left_child->isIntersecting(search_area);
+		is_intersecting_btm_right = bottom_right_child->isIntersecting(search_area);
 
 		// OR them all together, as if one or more are true, then there has been  a collision.
-		return (collision_top_left || collision_top_right) || (collision_btm_left || collision_btm_right);
+		return (is_intersecting_top_left || is_intersecting_top_right) || (is_intersecting_btm_left || is_intersecting_btm_right);
 	}
 
 	// if we are in the leaf nodes, loop through the nodes that are referenced in this quad.
 	for(Point *s : entities)
 	{
-		// return true only if there is a collision with one of this points
+		// return true only if there is a collision with one of the points
 		entity_rect = s->getGlobalBounds();
 		if(search_area.intersects(entity_rect))
 		{
