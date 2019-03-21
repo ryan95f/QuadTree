@@ -34,7 +34,7 @@ TestState::TestState(int width, int height) : width(width), height(height)
 	tree_square.setOutlineColor(sf::Color::Blue);
 	tree_square.setOutlineThickness(1);
 
-	collisionVector = new PointVector;
+	collision_vector = new PointVector;
 }
 
 TestState::~TestState()
@@ -47,10 +47,10 @@ TestState::~TestState()
 	}
 
 	// Deallocate the collision vector
-	if(collisionVector != nullptr)
+	if(collision_vector != nullptr)
 	{
-		delete collisionVector;
-		collisionVector = nullptr;
+		delete collision_vector;
+		collision_vector = nullptr;
 	}
 }
 
@@ -96,13 +96,13 @@ void TestState::update(float dt)
 	{
 		// get the bounds of the current point and extract all points that are in its quad.
 		sf::FloatRect bounds = points[i].getGlobalBounds();
-		tree->retrieve(collisionVector, bounds);
+		tree->retrieve(collision_vector, bounds);
 		points[i].update(dt);
 
 		// loop through all points in the quad and check that the current
 		// point could have collided with another point. 
 		// Max entities in the vector is based on the Quad Tree threshold.
-		for(Point *p : *collisionVector)
+		for(Point *p : *collision_vector)
 		{
 			// Use AABB collision detection
 			if(bounds.intersects(p->getGlobalBounds()))
@@ -114,7 +114,7 @@ void TestState::update(float dt)
 
 		// clear the collision vector so we can reuse it with the next lot of entities
 		// If this isn't clear, then a point will just get stuck.
-		collisionVector->clear();
+		collision_vector->clear();
 	}
 }
 

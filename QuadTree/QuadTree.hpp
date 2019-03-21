@@ -10,7 +10,10 @@
 
 typedef std::vector<Point *> PointVector;
 
-
+/**
+ * QuadTree - A spatial data structure for tracking objects across an area.
+ * In this case, it is being used to track objects within a window for collision detection.
+ */
 class QuadTree
 {
 public:
@@ -73,6 +76,11 @@ public:
 	 */
 	PointVector * retrieve(PointVector * returnList, sf::FloatRect search);
 
+	/**
+	 * Renders the quad tree on the view window
+	 * @param shape - Pointer to rectangle shape that will be used to visualize each quad.
+	 * @param target - Pointer to render window which the quad tree will be visualized on. 
+	 */
 	void display(sf::RectangleShape *shape, sf::RenderWindow *target);
 private:
 	/*============= Private Methods ==============*/
